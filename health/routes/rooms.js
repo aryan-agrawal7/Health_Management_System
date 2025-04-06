@@ -18,6 +18,20 @@ function getPatient(roomId) {
   return patients[roomId];
 }
 
+// Read vitals data from JSON file
+function getVitals(roomId) {
+  const vitalsPath = path.join(__dirname, '../data/vitals.json');
+  const vitalsData = fs.readFileSync(vitalsPath, 'utf8');
+  const vitals = JSON.parse(vitalsData);
+  
+  // Only get rooms ending with _1
+  const [floor] = roomId.split('_').map(Number);
+  const targetRoomId = `${floor}_1`;
+  
+  // Return the vitals if they exist, otherwise return null
+  return vitals[targetRoomId] || null;
+}
+
 // Function to write rooms data to JSON file
 function writeRooms(rooms) {
   const roomsPath = path.join(__dirname, '../data/rooms.json');
@@ -105,6 +119,11 @@ router.get('/room/:id', (req, res) => {
     diagnosis: "Unknown",
     medicines: []
   };
+  const vitalsInfo = getVitals(req.params.id) || {
+    heartRate: 0,
+    spo2: 0,
+    temperature: 0
+  };
   
   res.render('room.njk', { 
     room,
@@ -114,7 +133,8 @@ router.get('/room/:id', (req, res) => {
       age: patientInfo.age,
       admissionDate: patientInfo.admissionDate,
       diagnosis: patientInfo.diagnosis
-    }
+    },
+    vitalsInfo: vitalsInfo
   });
 });
 

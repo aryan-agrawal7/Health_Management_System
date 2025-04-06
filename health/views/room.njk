@@ -73,17 +73,17 @@
       <div class="vital-cards">
         <div class="vital-card">
           <h4>Heart Rate</h4>
-          <p id="heartRate">--</p>
+          <p id="heartRate">{{ vitalsInfo.heartRate|default('--') }}</p>
           <span>bpm</span>
         </div>
         <div class="vital-card">
           <h4>SpO2</h4>
-          <p id="spo2">--</p>
+          <p id="spo2">{{ vitalsInfo.spo2|default('--') }}</p>
           <span>%</span>
         </div>
         <div class="vital-card">
           <h4>Temperature</h4>
-          <p id="temperature">--</p>
+          <p id="temperature">{{ vitalsInfo.temperature|default('--') }}</p>
           <span>°C</span>
         </div>
       </div>

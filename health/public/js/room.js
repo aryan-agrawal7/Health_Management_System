@@ -29,21 +29,22 @@ document.addEventListener('DOMContentLoaded', function() {
       fetch(`/api/room/${roomId}`)
         .then(response => response.json())
         .then(data => {
-          heartRateEl.textContent = data.heartRate.toFixed(0);
-          spo2El.textContent = data.spo2.toFixed(0);
-          temperatureEl.textContent = data.temperature.toFixed(1);
+          // Use vitalsInfo values from the server response
+          heartRateEl.textContent = data.vitalsInfo.heartRate.toFixed(0);
+          spo2El.textContent = data.vitalsInfo.spo2.toFixed(0);
+          temperatureEl.textContent = data.vitalsInfo.temperature.toFixed(1);
           
           // Update chart
-          const time = new Date(data.timestamp).toLocaleTimeString();
+          const time = new Date(data.vitalsInfo.timestamp).toLocaleTimeString();
           chart.data.labels.push(time);
           if (chart.data.labels.length > 15) {
             chart.data.labels.shift();
             chart.data.datasets.forEach(dataset => dataset.data.shift());
           }
           
-          chart.data.datasets[0].data.push(data.heartRate);
-          chart.data.datasets[1].data.push(data.spo2);
-          chart.data.datasets[2].data.push(data.temperature);
+          chart.data.datasets[0].data.push(data.vitalsInfo.heartRate);
+          chart.data.datasets[1].data.push(data.vitalsInfo.spo2);
+          chart.data.datasets[2].data.push(data.vitalsInfo.temperature);
           chart.update();
         });
     }
